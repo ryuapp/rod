@@ -1,0 +1,6 @@
+{
+  "name": "@rod/rod",
+  "version": "0.0.0",
+  "exports": "./mod.ts",
+  "license": "MIT"
+}
