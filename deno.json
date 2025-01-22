@@ -2,5 +2,5 @@
   "fmt": {
     "proseWrap": "preserve"
   },
-  "workspace": ["./packages/*"]
+  "workspace": ["./packages/*", "./benchmarks"]
 }
