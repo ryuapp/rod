@@ -2,5 +2,8 @@
   "fmt": {
     "proseWrap": "preserve"
   },
-  "workspace": ["./packages/*", "./benchmarks"]
+  "workspace": ["./packages/*", "./benchmarks"],
+  "imports": {
+    "@std/assert": "jsr:@std/assert@^1.0.11"
+  }
 }
