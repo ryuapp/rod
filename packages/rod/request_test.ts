@@ -12,3 +12,9 @@ Deno.test("RodRequest - searchParams", () => {
   const req = new RodRequest("/search", request);
   assertEquals(req.searchParams, { q: "hello" });
 });
+
+Deno.test("RodRequest - searchParams - array", () => {
+  const request = new Request("http://localhost/search?q=hello&q=world");
+  const req = new RodRequest("/search", request);
+  assertEquals(req.searchParams, { q: ["hello", "world"] });
+});

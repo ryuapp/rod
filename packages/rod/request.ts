@@ -39,10 +39,18 @@ export class RodRequest<Path extends string> {
    *   return new Response(`Search query: ${c.req.searchParams.q}`);
    * });
    */
-  get searchParams(): { [key: string]: string | undefined } {
+  get searchParams(): { [key: string]: string | string[] | undefined } {
     const url = new URL(this.request.url);
-    const searchParams: { [key: string]: string | undefined } = {};
+    const searchParams: { [key: string]: string | string[] | undefined } = {};
     for (const [key, value] of url.searchParams) {
+      if (searchParams[key] !== undefined) {
+        if (Array.isArray(searchParams[key])) {
+          searchParams[key].push(value);
+        } else {
+          searchParams[key] = [searchParams[key], value];
+        }
+        continue;
+      }
       searchParams[key] = value;
     }
     return searchParams;
