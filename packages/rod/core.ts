@@ -102,6 +102,8 @@ export class RawRod {
    *
    * @example Usage
    * ```ts
+   * import { Rod } from "@rod/rod";
+   *
    * const r = new Rod();
    * r.get("/", () => new Response("Hello World!"));
    *
@@ -110,6 +112,8 @@ export class RawRod {
    *
    * @example Default export
    * ```ts
+   * import { Rod } from "@rod/rod";
+   *
    * const r = new Rod();
    * r.get("/", () => new Response("Hello World!"));
    *

@@ -13,6 +13,8 @@ export class RodRequest<Path extends string> {
    *
    * @example Usage
    * ```ts
+   * import { Rod } from "@rod/rod";
+   *
    * const r = new Rod();
    *
    * r.get("/:name", (c) => {
@@ -33,6 +35,8 @@ export class RodRequest<Path extends string> {
    *
    * @example Usage
    * ```ts
+   * import { Rod } from "@rod/rod";
+   *
    * const r = new Rod();
    *
    * r.get("/search", (c) => {
