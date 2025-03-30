@@ -12,6 +12,7 @@ export type HTTPMethod =
 export type PathSegments<Path extends string> = Path extends
   `${infer SegmentA}/${infer SegmentB}`
   ? ParamOnly<SegmentA> | PathSegments<SegmentB>
+  : Path extends `${infer Segment}*` ? ParamOnly<Segment> | "0"
   : ParamOnly<Path>;
 type ParamOnly<Segment extends string> = Segment extends `:${infer Param}`
   ? Param
