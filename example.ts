@@ -13,11 +13,11 @@ r.get("/", () => {
 });
 
 r.get("/:name", (c) => {
-  return new Response(`Hello ${c.req.params.name}!`);
+  return new Response(`Hello ${c.params.name}!`);
 });
 
 r.get("/search", (c) => {
-  return new Response(`Search query: ${c.req.searchParams.q}`);
+  return new Response(`Search query: ${c.searchParams.q}`);
 });
 
 Deno.serve(r.fetch);

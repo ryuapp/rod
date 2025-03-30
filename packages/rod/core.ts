@@ -1,10 +1,11 @@
 import { RodContext } from "./context.ts";
+import { RodPattern } from "./pattern.ts";
 import type { Handler, HTTPMethod } from "./type.ts";
 
 export class RawRod {
   protected routes: Array<{
     pathname: string;
-    pattern: URLPattern;
+    pattern: RodPattern<string>;
     method: "ALL" | Array<HTTPMethod>;
     handler: Handler<string>;
   }> = [];
@@ -15,47 +16,37 @@ export class RawRod {
   ) {
     this.routes.push({
       pathname: path,
-      pattern: new URLPattern({ pathname: path }),
+      pattern: new RodPattern({ pathname: path }),
       method,
       handler: handler as Handler<string>,
     });
   }
   /**
    * Register GET method route
-   * @param path
-   * @param handler
    */
   get<Path extends string>(path: Path, handler: Handler<Path>) {
     this.addRoute(["GET"], path, handler);
   }
   /**
    * Register POST method route
-   * @param path
-   * @param handler
    */
   post<Path extends string>(path: Path, handler: Handler<Path>) {
     this.addRoute(["POST"], path, handler);
   }
   /**
    * Register PUT method route
-   * @param path
-   * @param handler
    */
   put<Path extends string>(path: Path, handler: Handler<Path>) {
     this.addRoute(["PUT"], path, handler);
   }
   /**
    * Register DELETE method route
-   * @param path
-   * @param handler
    */
   delete<Path extends string>(path: Path, handler: Handler<Path>) {
     this.addRoute(["DELETE"], path, handler);
   }
   /**
    * Register PATCH method route
-   * @param path
-   * @param handler
    */
   patch<Path extends string>(path: Path, handler: Handler<Path>) {
     this.addRoute(["PATCH"], path, handler);
@@ -68,8 +59,6 @@ export class RawRod {
   }
   /**
    * Register OPTIONS method route
-   * @param path
-   * @param handler
    */
   options<Path extends string>(path: Path, handler: Handler<Path>) {
     this.addRoute(["OPTIONS"], path, handler);
@@ -89,8 +78,6 @@ export class RawRod {
 
   /**
    * Register route for any method
-   * @param path
-   * @param handler
    */
   all<Path extends string>(path: Path, handler: Handler<Path>) {
     this.addRoute("ALL", path, handler);
@@ -133,7 +120,12 @@ export class RawRod {
         ) {
           const result = route.pattern.exec(request.url);
           if (result) {
-            const context = new RodContext(route.pathname, request);
+            const context = new RodContext(
+              {
+                params: result.params,
+                request,
+              },
+            );
             const res = await route.handler(context, next);
             if (res) {
               response = res;

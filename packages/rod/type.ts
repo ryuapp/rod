@@ -1,5 +1,3 @@
-import type { RodRequest } from "./request.ts";
-
 export type HTTPMethod =
   | "GET"
   | "POST"
@@ -26,5 +24,6 @@ export type Handler<Path extends string> = (
 
 export type RodContext<Path extends string> = {
   request: Request;
-  req: RodRequest<Path>;
+  params: { [Key in PathSegments<Path>]: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 };
