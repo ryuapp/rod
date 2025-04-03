@@ -124,9 +124,10 @@ export class RawRod {
               {
                 params: result.params,
                 request,
+                next,
               },
             );
-            const res = await route.handler(context, next);
+            const res = await route.handler(context);
             if (res) {
               response = res;
             }

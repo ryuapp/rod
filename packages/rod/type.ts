@@ -20,11 +20,11 @@ type ParamOnly<Segment extends string> = Segment extends `:${infer Param}`
 
 export type Handler<Path extends string> = (
   context: RodContext<Path>,
-  next: () => Promise<void>,
 ) => Response | Promise<Response> | Promise<void>;
 
 export type RodContext<Path extends string> = {
   request: Request;
   params: { [Key in PathSegments<Path>]: string };
   searchParams: { [key: string]: string | string[] | undefined };
+  next: () => Promise<void>;
 };

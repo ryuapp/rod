@@ -2,9 +2,9 @@ import { Rod } from "@rod/rod";
 
 const r = new Rod();
 
-r.get("*", async (_c, next) => {
+r.get("*", async (c) => {
   console.log("Before Middleware");
-  await next();
+  await c.next();
   console.log("After Middleware");
 });
 
