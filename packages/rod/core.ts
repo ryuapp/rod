@@ -85,26 +85,16 @@ export class RawRod {
   /**
    * Convert Request to Response
    *
-   * @param request
+   * @param Request
    *
-   * @example Usage
+   * @example
    * ```ts
    * import { Rod } from "@rod/rod";
    *
-   * const r = new Rod();
-   * r.get("/", () => new Response("Hello World!"));
+   * const router = new Rod();
+   * router.get("/", () => new Response("Hello World!"));
    *
-   * Deno.serve(r.fetch);
-   * ```
-   *
-   * @example Default export
-   * ```ts
-   * import { Rod } from "@rod/rod";
-   *
-   * const r = new Rod();
-   * r.get("/", () => new Response("Hello World!"));
-   *
-   * export default r;
+   * export default router;
    * ```
    */
   fetch = async (request: Request): Promise<Response> => {

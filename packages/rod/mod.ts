@@ -7,12 +7,13 @@ import { RawRod } from "./core.ts";
  * ```ts
  * import { Rod } from "@rod/rod";
  *
- * const r = new Rod();
+ * const router = new Rod();
  *
- * r.get("/", () => {
+ * router.get("/", () => {
  *  return new Response("Hello, World!");
  * });
- * export default r;
+ *
+ * export default router;
  * ```
  */
 export class Rod extends RawRod {

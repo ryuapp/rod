@@ -16,9 +16,9 @@ export class RodContext<Path extends string> implements RodContextType<Path> {
    * ```ts
    * import { Rod } from "@rod/rod";
    *
-   * const r = new Rod();
+   * const router = new Rod();
    *
-   * r.get("/:name", (c) => {
+   * router.get("/:name", (c) => {
    *   return new Response(`Hello ${c.params.name}!`);
    * });
    * ```
@@ -39,9 +39,9 @@ export class RodContext<Path extends string> implements RodContextType<Path> {
    * ```ts
    * import { Rod } from "@rod/rod";
    *
-   * const r = new Rod();
+   * const router = new Rod();
    *
-   * r.get("/search", (c) => {
+   * router.get("/search", (c) => {
    *   return new Response(`Search query: ${c.searchParams.q}`);
    * });
    */
