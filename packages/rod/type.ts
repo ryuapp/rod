@@ -24,7 +24,61 @@ export type Handler<Path extends string> = (
 
 export type RodContext<Path extends string> = {
   request: Request;
+  /**
+   * Get path parameters
+   *
+   * @example Usage
+   * ```ts
+   * import { Rod } from "@rod/rod";
+   *
+   * const router = new Rod();
+   *
+   * router.get("/:name", (c) => {
+   *   return new Response(`Hello ${c.params.name}!`);
+   * });
+   * ```
+   */
   params: { [Key in PathSegments<Path>]: string };
+
+  /**
+   * Get search parameters
+   *
+   * @example Usage
+   * ```ts
+   * import { Rod } from "@rod/rod";
+   *
+   * const router = new Rod();
+   *
+   * router.get("/search", (c) => {
+   *   return new Response(`Search query: ${c.searchParams.q}`);
+   * });
+   */
   searchParams: { [key: string]: string | string[] | undefined };
+
+  /**
+   * Call next handler
+   *
+   * @example Usage
+   * ```ts
+   * import { Rod } from "@rod/rod";
+   *
+   * const router = new Rod();
+   *
+   * router.get("*", (c) => {
+   *   console.log("Before Middleware");
+   *   await c.next();
+   *   console.log("After Middleware");
+   * });
+   *
+   * router.get("/", () => {
+   *  return new Response("Hello World!");
+   * });
+   *
+   * // Output:
+   * //   Before Middleware
+   * //     Hello World!
+   * //   After Middleware
+   * ```
+   */
   next: () => Promise<void>;
 };

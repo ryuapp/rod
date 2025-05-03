@@ -8,21 +8,6 @@ type RodContextInit<Path extends string> = {
 
 export class RodContext<Path extends string> implements RodContextType<Path> {
   public request: Request;
-
-  /**
-   * Get path parameters
-   *
-   * @example Usage
-   * ```ts
-   * import { Rod } from "@rod/rod";
-   *
-   * const router = new Rod();
-   *
-   * router.get("/:name", (c) => {
-   *   return new Response(`Hello ${c.params.name}!`);
-   * });
-   * ```
-   */
   public readonly params: { [Key in PathSegments<Path>]: string };
   public next: () => Promise<void>;
 
@@ -32,19 +17,6 @@ export class RodContext<Path extends string> implements RodContextType<Path> {
     this.next = next ?? (() => Promise.resolve());
   }
 
-  /**
-   * Get search parameters
-   *
-   * @example Usage
-   * ```ts
-   * import { Rod } from "@rod/rod";
-   *
-   * const router = new Rod();
-   *
-   * router.get("/search", (c) => {
-   *   return new Response(`Search query: ${c.searchParams.q}`);
-   * });
-   */
   get searchParams(): { [key: string]: string | string[] | undefined } {
     const url = new URL(this.request.url);
     const searchParams: { [key: string]: string | string[] | undefined } = {};
