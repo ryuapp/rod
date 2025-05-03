@@ -7,13 +7,17 @@ export interface MatchRouteResult {
   params: Record<string, string | undefined>;
 }
 
-export interface ParamNode<T> {
+type RodPatternInput = string | {
+  pathname: string;
+};
+
+interface ParamNode<T> {
   name: string;
   store: T | null;
   inert: Node<T> | null;
 }
 
-export interface Node<T> {
+interface Node<T> {
   part: string;
   store: T | null;
   inert: Record<number, Node<T>> | null;
@@ -247,11 +251,11 @@ export class RodPattern<T> {
     return node.store;
   }
 
-  exec(url: string): MatchRouteResult | null {
-    if (url.startsWith("http")) {
-      const urlObj = new URL(url);
-      url = urlObj.pathname;
-    }
+  public exec(input: RodPatternInput): MatchRouteResult | null {
+    const url = typeof input === "string"
+      ? input.startsWith("http") ? new URL(input).pathname : input
+      : input.pathname;
+
     return matchRoute(url, url.length, this.root, 0);
   }
 }
