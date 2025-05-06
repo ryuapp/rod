@@ -1,8 +1,10 @@
 import { RodContext } from "./context.ts";
 import { RodPattern } from "./pattern.ts";
 import type { Handler, HTTPMethod } from "./type.ts";
+import { joinPath } from "./utils/path.ts";
 
 export class RawRod {
+  public readonly basePath = "/";
   protected routes: Array<{
     pathname: string;
     pattern: RodPattern<string>;
@@ -14,13 +16,23 @@ export class RawRod {
     path: Path,
     handler: Handler<Path>,
   ) {
+    const pathname = joinPath(this.basePath, path);
     this.routes.push({
-      pathname: path,
-      pattern: new RodPattern({ pathname: path }),
+      pathname,
+      pattern: new RodPattern({ pathname }),
       method,
-      handler: handler as Handler<string>,
+      handler,
     });
   }
+
+  constructor(options?: { basePath?: string }) {
+    if (options?.basePath) {
+      // deno-lint-ignore ban-ts-comment
+      // @ts-ignore
+      this.basePath = options.basePath;
+    }
+  }
+
   /**
    * Register GET method route
    */
@@ -82,6 +94,28 @@ export class RawRod {
   all<Path extends string>(path: Path, handler: Handler<Path>) {
     this.addRoute("ALL", path, handler);
   }
+
+  /**
+   * Register routes into another router.  \
+   * This will add all routes from the given router to the router.
+   *
+   * ```ts
+   * import { Rod } from "@rod/rod";
+   *
+   * const api = new Rod();
+   * api.get("/hello", () => new Response("Hello World!"));
+   *
+   * const router = new Rod();
+   * router.route("/api", api);  // /api/hello
+   * ```
+   */
+  route<Path extends string>(path: Path, router: RawRod) {
+    for (const r of router.routes) {
+      const newPathname = joinPath(path, r.pathname);
+      this.addRoute(r.method, newPathname, r.handler);
+    }
+  }
+
   /**
    * Convert Request to Response
    *

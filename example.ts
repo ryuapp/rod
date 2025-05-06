@@ -12,12 +12,19 @@ router.get("/", () => {
   return new Response("Hello World!");
 });
 
-router.get("/:name", (c) => {
+router.get("/users/:name", (c) => {
   return new Response(`Hello ${c.params.name}!`);
 });
 
 router.get("/search", (c) => {
   return new Response(`Search query: ${c.searchParams.q}`);
 });
+
+const subRouter = new Rod();
+subRouter.get("/", () => {
+  return new Response("Hello World from sub router!");
+});
+
+router.route("/sub", subRouter);
 
 Deno.serve(router.fetch);
