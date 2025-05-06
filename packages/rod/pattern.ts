@@ -57,7 +57,6 @@ const createParamNode = <T>(name: string): ParamNode<T> => ({
 
 export class RodPattern<T> {
   root: Node<T> = createNode("/");
-  history: [string, T][] = [];
 
   private static regex = {
     static: /:.+?(?=\/|$)/,
@@ -66,16 +65,12 @@ export class RodPattern<T> {
   };
 
   constructor(init: { pathname: string }) {
-    this.addRoute(init.pathname, {} as T, { ignoreError: true });
+    this.addRoute(init.pathname, {} as T);
   }
 
   private addRoute(
     path: string,
     store: T,
-    {
-      ignoreError = false,
-      ignoreHistory = false,
-    }: { ignoreError?: boolean; ignoreHistory?: boolean } = {},
   ) {
     if (typeof path !== "string") {
       throw new TypeError("Route path must be a string");
@@ -90,25 +85,17 @@ export class RodPattern<T> {
 
     if (optionalParams) {
       const originalPath = path.replaceAll("?", "");
-      this.addRoute(originalPath, store, {
-        ignoreError,
-      });
+      this.addRoute(originalPath, store);
 
       for (let i = 0; i < optionalParams.length; i++) {
         const newPath = path.replace("/" + optionalParams.at(i), "");
 
-        this.addRoute(newPath, store, {
-          ignoreError: true,
-        });
+        this.addRoute(newPath, store);
       }
       return store;
     }
 
     if (optionalParams) path.replaceAll("?", "");
-
-    if (this.history.find(([p]) => p === path)) {
-      return store;
-    }
 
     if (
       isWildcard ||
@@ -117,8 +104,6 @@ export class RodPattern<T> {
       // Slice off trailing '*'
       path = path.slice(0, -1);
     }
-
-    if (!ignoreHistory) this.history.push([path, store]);
 
     const inertParts = path.split(RodPattern.regex.static);
     const paramParts = path.match(RodPattern.regex.params) || [];
@@ -142,14 +127,11 @@ export class RodPattern<T> {
 
         if (node.params === null) node.params = createParamNode(param);
         else if (node.params.name !== param) {
-          if (ignoreError) return store;
-          else {
             throw new Error(
               `Cannot create route "${path}" with parameter "${param}" ` +
                 "because a route already exists with a different parameter name " +
                 `("${node.params.name}") in the same location`,
             );
-          }
         }
 
         const params = node.params;
@@ -223,14 +205,11 @@ export class RodPattern<T> {
 
       if (node.params === null) node.params = createParamNode(name);
       else if (node.params.name !== name) {
-        if (ignoreError) return store;
-        else {
           throw new Error(
             `Cannot create route "${path}" with parameter "${name}" ` +
               "because a route already exists with a different parameter name " +
               `("${node.params.name}") in the same location`,
           );
-        }
       }
 
       if (node.params.store === null) node.params.store = store;
