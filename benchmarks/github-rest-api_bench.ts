@@ -24,7 +24,13 @@ frameworks.forEach(({ name, instance }) => {
     });
   });
 
-  Deno.bench({ name, group: "GitHub Rest API Pattern - Routing" }, () => {
-    app.fetch(new Request("http://localhost/test/test"));
+  Deno.bench({ name, group: "GitHub Rest API Pattern - /" }, () => {
+    app.fetch(new Request("http://localhost/"));
+  });
+  Deno.bench({
+    name,
+    group: "GitHub Rest API Pattern - /users/{user}/events/orgs/{org}",
+  }, () => {
+    app.fetch(new Request("http://localhost/users/test/events/orgs/test"));
   });
 });
