@@ -3,8 +3,10 @@
 // SPDX-License-Identifier: MIT
 // https://github.com/SaltyAom/memoirist
 
-export interface MatchRouteResult {
-  params: Record<string, string | undefined>;
+interface MatchRouteResult {
+  pathname: {
+    groups: Record<string, string | undefined>;
+  };
 }
 
 type RodPatternInput = string | {
@@ -127,11 +129,11 @@ export class RodPattern<T> {
 
         if (node.params === null) node.params = createParamNode(param);
         else if (node.params.name !== param) {
-            throw new Error(
-              `Cannot create route "${path}" with parameter "${param}" ` +
-                "because a route already exists with a different parameter name " +
-                `("${node.params.name}") in the same location`,
-            );
+          throw new Error(
+            `Cannot create route "${path}" with parameter "${param}" ` +
+              "because a route already exists with a different parameter name " +
+              `("${node.params.name}") in the same location`,
+          );
         }
 
         const params = node.params;
@@ -205,11 +207,11 @@ export class RodPattern<T> {
 
       if (node.params === null) node.params = createParamNode(name);
       else if (node.params.name !== name) {
-          throw new Error(
-            `Cannot create route "${path}" with parameter "${name}" ` +
-              "because a route already exists with a different parameter name " +
-              `("${node.params.name}") in the same location`,
-          );
+        throw new Error(
+          `Cannot create route "${path}" with parameter "${name}" ` +
+            "because a route already exists with a different parameter name " +
+            `("${node.params.name}") in the same location`,
+        );
       }
 
       if (node.params.store === null) node.params.store = store;
@@ -267,14 +269,18 @@ const matchRoute = <T>(
     if (node.store !== null) {
       return {
         // store: node.store,
-        params: {},
+        pathname: {
+          groups: {},
+        },
       };
     }
 
     if (node.wildcardStore !== null) {
       return {
         // store: node.wildcardStore,
-        params: { "0": "" },
+        pathname: {
+          groups: { "0": "" },
+        },
       };
     }
 
@@ -307,14 +313,16 @@ const matchRoute = <T>(
 
           return {
             // store,
-            params,
+            pathname: {
+              groups: params,
+            },
           };
         }
       } else if (inert !== null) {
         const route = matchRoute(url, urlLength, inert, slashIndex);
 
         if (route !== null) {
-          route.params[name] = url.substring(endIndex, slashIndex);
+          route.pathname.groups[name] = url.substring(endIndex, slashIndex);
 
           return route;
         }
@@ -326,8 +334,10 @@ const matchRoute = <T>(
   if (node.wildcardStore !== null) {
     return {
       // store: node.wildcardStore,
-      params: {
-        "0": url.slice(endIndex),
+      pathname: {
+        groups: {
+          "0": url.slice(endIndex),
+        },
       },
     };
   }

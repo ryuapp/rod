@@ -1,4 +1,5 @@
 import { RawRod } from "./core.ts";
+import { RodPattern } from "./pattern.ts";
 
 /**
  * Rod class
@@ -17,4 +18,13 @@ import { RawRod } from "./core.ts";
  * ```
  */
 export class Rod extends RawRod {
+  constructor(options?: { basePath?: string }) {
+    super();
+    if (options?.basePath) {
+      // @ts-ignore assign to readonly property
+      this.basePath = options.basePath;
+    }
+    // @ts-ignore assign to readonly property
+    this.UrlPattern = RodPattern;
+  }
 }

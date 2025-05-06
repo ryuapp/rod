@@ -1,13 +1,14 @@
 import { RodContext } from "./context.ts";
-import { RodPattern } from "./pattern.ts";
 import type { Handler, HTTPMethod } from "./type.ts";
 import { joinPath } from "./utils/path.ts";
 
 export class RawRod {
   public readonly basePath = "/";
+  protected UrlPattern = URLPattern;
   protected routes: Array<{
     pathname: string;
-    pattern: RodPattern<string>;
+    // deno-lint-ignore no-explicit-any
+    pattern: any;
     method: "ALL" | Array<HTTPMethod>;
     handler: Handler<string>;
   }> = [];
@@ -19,7 +20,7 @@ export class RawRod {
     const pathname = joinPath(this.basePath, path);
     this.routes.push({
       pathname,
-      pattern: new RodPattern({ pathname }),
+      pattern: new this.UrlPattern({ pathname }),
       method,
       handler,
     });
@@ -27,8 +28,7 @@ export class RawRod {
 
   constructor(options?: { basePath?: string }) {
     if (options?.basePath) {
-      // deno-lint-ignore ban-ts-comment
-      // @ts-ignore
+      // @ts-ignore assign to readonly property
       this.basePath = options.basePath;
     }
   }
@@ -146,7 +146,7 @@ export class RawRod {
           if (result) {
             const context = new RodContext(
               {
-                params: result.params,
+                params: result.pathname.groups,
                 request,
                 next,
               },
