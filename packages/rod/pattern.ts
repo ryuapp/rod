@@ -239,6 +239,9 @@ export class RodPattern<T> {
 
     return matchRoute(url, url.length, this.root, 0);
   }
+  public test(input: RodPatternInput): boolean {
+    return this.exec(input) !== null;
+  }
 }
 
 const matchRoute = <T>(

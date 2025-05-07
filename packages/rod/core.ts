@@ -142,8 +142,8 @@ export class RawRod {
           route.method === "ALL" ||
           route.method.includes(request.method as HTTPMethod)
         ) {
-          const result = route.pattern.exec(request.url);
-          if (result) {
+          if (route.pattern.test(request.url)) {
+            const result = route.pattern.exec(request.url);
             const context = new RodContext(
               {
                 params: result.pathname.groups,
