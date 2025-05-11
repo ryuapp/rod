@@ -5,7 +5,7 @@ const data = Object.keys(file.paths).map((path) => {
   // deno-lint-ignore no-explicit-any
   const methods = Object.keys((file.paths as Record<string, any>)[path]);
   return {
-    path,
+    path: path.replaceAll(/{(\w+)}/g, ":$1"),
     method: methods,
   };
 });
