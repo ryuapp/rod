@@ -24,6 +24,7 @@ export type Handler<Path extends string> = (
 
 export type RodContext<Path extends string> = {
   request: Request;
+  response: Response;
   /**
    * Get path parameters
    *

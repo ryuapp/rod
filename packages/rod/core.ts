@@ -132,7 +132,8 @@ export class RawRod {
    * ```
    */
   fetch = async (request: Request): Promise<Response> => {
-    let response: Response | undefined;
+    let hasResponse = false;
+    let response = new Response();
     let index = -1;
     const next = async () => {
       index++;
@@ -148,22 +149,24 @@ export class RawRod {
               {
                 params: result.pathname.groups,
                 request,
+                response,
                 next,
               },
             );
             const res = await route.handler(context);
             if (res) {
-              response = res;
+              response = new Response(res.body, res);
+              hasResponse = true;
+              return;
+            } else {
+              response = new Response(response.body, context.response);
             }
           }
-        }
-        if (response) {
-          return;
         }
         next();
       }
     };
     await next();
-    return response || new Response("Not Found", { status: 404 });
+    return hasResponse ? response : new Response("Not Found", { status: 404 });
   };
 }

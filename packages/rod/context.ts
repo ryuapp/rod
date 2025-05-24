@@ -3,17 +3,20 @@ import type { PathSegments, RodContext as RodContextType } from "./type.ts";
 type RodContextInit<Path extends string> = {
   params: { [Key in PathSegments<Path>]: string };
   request: Request;
+  response: Response;
   next?: () => Promise<void>;
 };
 
 export class RodContext<Path extends string> implements RodContextType<Path> {
   public request: Request;
+  public response: Response;
   public readonly params: { [Key in PathSegments<Path>]: string };
   public next: () => Promise<void>;
 
-  constructor({ params, request, next }: RodContextInit<Path>) {
+  constructor({ params, request, response, next }: RodContextInit<Path>) {
     this.params = params;
     this.request = request;
+    this.response = response;
     this.next = next ?? (() => Promise.resolve());
   }
 

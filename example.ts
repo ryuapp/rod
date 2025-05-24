@@ -8,6 +8,11 @@ router.get("*", async (c) => {
   console.log("After Middleware");
 });
 
+router.all("*", async (c) => {
+  await c.next();
+  c.response.headers.set("X-Test-Id", "Test");
+});
+
 router.get("/", () => {
   return new Response("Hello World!");
 });
