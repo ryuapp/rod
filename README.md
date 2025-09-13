@@ -5,8 +5,8 @@ Rod is a routing library for [Request](https://developer.mozilla.org/en-US/docs/
 ```ts
 import { Rod } from "@rod/rod";
 
-const router = new Rod();
-router.get("/", () => new Response("Hello World"));
+const app = new Rod();
+app.get("/", () => new Response("Hello World"));
 
-export default router;
+export default app;
 ```

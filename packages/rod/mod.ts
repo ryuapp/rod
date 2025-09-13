@@ -8,13 +8,13 @@ import { RodPattern } from "./pattern.ts";
  * ```ts
  * import { Rod } from "@rod/rod";
  *
- * const router = new Rod();
+ * const app = new Rod();
  *
- * router.get("/", () => {
+ * app.get("/", () => {
  *  return new Response("Hello, World!");
  * });
  *
- * export default router;
+ * export default app;
  * ```
  */
 export class Rod extends RawRod {

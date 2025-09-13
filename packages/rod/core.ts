@@ -96,8 +96,8 @@ export class RawRod {
   }
 
   /**
-   * Register routes into another router.  \
-   * This will add all routes from the given router to the router.
+   * Register routes into another app.  \
+   * This will add all routes from the given app to the app.
    *
    * ```ts
    * import { Rod } from "@rod/rod";
@@ -105,12 +105,12 @@ export class RawRod {
    * const api = new Rod();
    * api.get("/hello", () => new Response("Hello World!"));
    *
-   * const router = new Rod();
-   * router.route("/api", api);  // /api/hello
+   * const app = new Rod();
+   * app.route("/api", api);  // /api/hello
    * ```
    */
-  route<Path extends string>(path: Path, router: RawRod) {
-    for (const r of router.routes) {
+  route<Path extends string>(path: Path, app: RawRod) {
+    for (const r of app.routes) {
       const newPathname = joinPath(path, r.pathname);
       this.addRoute(r.method, newPathname, r.handler);
     }
@@ -125,10 +125,10 @@ export class RawRod {
    * ```ts
    * import { Rod } from "@rod/rod";
    *
-   * const router = new Rod();
-   * router.get("/", () => new Response("Hello World!"));
+   * const app = new Rod();
+   * app.get("/", () => new Response("Hello World!"));
    *
-   * export default router;
+   * export default app;
    * ```
    */
   fetch = async (request: Request): Promise<Response> => {

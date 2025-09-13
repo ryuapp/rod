@@ -32,9 +32,9 @@ export type RodContext<Path extends string> = {
    * ```ts
    * import { Rod } from "@rod/rod";
    *
-   * const router = new Rod();
+   * const app = new Rod();
    *
-   * router.get("/:name", (c) => {
+   * app.get("/:name", (c) => {
    *   return new Response(`Hello ${c.params.name}!`);
    * });
    * ```
@@ -48,9 +48,9 @@ export type RodContext<Path extends string> = {
    * ```ts
    * import { Rod } from "@rod/rod";
    *
-   * const router = new Rod();
+   * const app = new Rod();
    *
-   * router.get("/search", (c) => {
+   * app.get("/search", (c) => {
    *   return new Response(`Search query: ${c.searchParams.q}`);
    * });
    */
@@ -63,15 +63,15 @@ export type RodContext<Path extends string> = {
    * ```ts
    * import { Rod } from "@rod/rod";
    *
-   * const router = new Rod();
+   * const app = new Rod();
    *
-   * router.get("*", (c) => {
+   * app.get("*", (c) => {
    *   console.log("Before Middleware");
    *   await c.next();
    *   console.log("After Middleware");
    * });
    *
-   * router.get("/", () => {
+   * app.get("/", () => {
    *  return new Response("Hello World!");
    * });
    *
