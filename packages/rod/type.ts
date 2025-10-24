@@ -83,3 +83,11 @@ export type RodContext<Path extends string> = {
    */
   next: () => Promise<void>;
 };
+
+/**
+ * Type to validate that a path starts with the given prefix
+ */
+export type PathWithPrefix<
+  Prefix extends string,
+  Path extends string,
+> = Path extends `${Prefix}${string}` ? Path : never;
